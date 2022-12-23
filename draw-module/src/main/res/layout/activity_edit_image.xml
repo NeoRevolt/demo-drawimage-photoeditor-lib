@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toTopOf="@id/rvConstraintTools"
         app:layout_constraintStart_toEndOf="@id/imgUndo" />
 
-    <com.example.photoeditor_module.burhanrashid52.photoeditor.PhotoEditorView
+    <com.neorevolt.pesteditor.burhanrashid52.photoeditor.PhotoEditorView
         android:id="@+id/photoEditorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

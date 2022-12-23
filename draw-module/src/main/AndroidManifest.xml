@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.draw_module_module">
+    package="com.neorevolt.pesteditor">
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -11,11 +11,11 @@
 
     <application>
         <activity
-            android:name="com.example.photoeditor_module.EditorActivity"
+            android:name="com.neorevolt.pesteditor.EditorActivity"
             android:exported="false" />
 
         <activity
-            android:name="com.example.photoeditor_module.EditImageActivity"
+            android:name="com.neorevolt.pesteditor.EditImageActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name="com.example.photoeditor_module.ShowDataLibActivity"
+            android:name="com.neorevolt.pesteditor.ShowDataLibActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

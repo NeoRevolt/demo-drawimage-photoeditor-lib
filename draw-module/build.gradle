@@ -10,7 +10,7 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'maven-publish'
 
 android {
-    namespace 'com.example.draw_module'
+    namespace 'com.neorevolt.pesteditor'
     compileSdk 33
 
     defaultConfig {
