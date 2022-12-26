@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.forpublishmodule.databinding.ActivityMainBinding
+import com.neorevolt.drawimage.EditImageActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -20,9 +21,9 @@ class MainActivity : AppCompatActivity() {
 //                    startActivity(it)
 //                }
 
-                Intent(this@MainActivity, Class.forName("com.neorevolt.pesteditor.EditImageActivity")).also {
-                    it.putExtra(com.neorevolt.pesteditor.EditImageActivity.EXTRA_REQ,"remote")
-                    it.putExtra(com.neorevolt.pesteditor.EditImageActivity.EXTRA_PHOTO,"https://w0.peakpx.com/wallpaper/205/460/HD-wallpaper-sea-beach-beautiful-scene-clouds-deep-sea-natural-graphy-nature-beauty-graphy-lover-portrait.jpg")
+                Intent(this@MainActivity, Class.forName("com.neorevolt.drawimage.EditImageActivity")).also {
+                    it.putExtra(EditImageActivity.EXTRA_REQ,"remote")
+                    it.putExtra(EditImageActivity.EXTRA_PHOTO,"https://w0.peakpx.com/wallpaper/205/460/HD-wallpaper-sea-beach-beautiful-scene-clouds-deep-sea-natural-graphy-nature-beauty-graphy-lover-portrait.jpg")
                     startActivity(it)
                 }
 //                Intent(this@MainActivity, ShowDataLibActivity::class.java).also {

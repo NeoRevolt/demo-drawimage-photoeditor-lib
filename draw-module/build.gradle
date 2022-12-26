@@ -10,7 +10,7 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'maven-publish'
 
 android {
-    namespace 'com.neorevolt.pesteditor'
+    namespace 'com.neorevolt.drawimage'
     compileSdk 33
 
     defaultConfig {
@@ -102,7 +102,4 @@ dependencies {
     //DATABASE
     implementation 'androidx.room:room-ktx:2.5.0-beta02'
     kapt 'androidx.room:room-compiler:2.5.0-beta02'
-
-
-
 }
