@@ -95,8 +95,6 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
 
         initViews()
         handleIntentImage(mPhotoEditorView?.source)
-        // TODO : This Wonder Font are optional
-//        mWonderFont = Typeface.createFromAsset(assets, "beyond_wonderland.ttf")
         mPropertiesBSFragment = PropertiesBSFragment()
         // TODO : This EmojiFragment() still has some bug, the emoji is still null
 //        mEmojiBSFragment = EmojiBSFragment()
@@ -113,12 +111,16 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         mRvFilters?.layoutManager = llmFilters
         mRvFilters?.adapter = mFilterViewAdapter
 
-        // NOTE(lucianocheng): Used to set integration testing parameters to PhotoEditor
-        val pinchTextScalable = intent.getBooleanExtra(com.neorevolt.pesteditor.EditImageActivity.Companion.PINCH_TEXT_SCALABLE_INTENT_KEY, true)
+        val pinchTextScalable = intent.getBooleanExtra(
+            PINCH_TEXT_SCALABLE_INTENT_KEY,
+            true
+        )
 
         // NOTE Get Image URL from Detail Activity
-        val photoUrl = intent.getStringExtra(com.neorevolt.pesteditor.EditImageActivity.Companion.EXTRA_PHOTO)
-        val requestCode = intent.getStringExtra(com.neorevolt.pesteditor.EditImageActivity.Companion.EXTRA_REQ)
+        val photoUrl =
+            intent.getStringExtra(EXTRA_PHOTO)
+        val requestCode =
+            intent.getStringExtra(EXTRA_REQ)
 
         mPhotoEditor = mPhotoEditorView?.run {
             PhotoEditor.Builder(this@EditImageActivity, this)
@@ -127,16 +129,17 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         }
         mPhotoEditor?.setOnPhotoEditorListener(this)
 
-        //TODO NOTE : Langsung mengambil gambar dari gallery
+        //TODO NOTE : Get image from gallery or remote by requestCode by Intent
         if (requestCode == "gallery") {
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                com.neorevolt.pesteditor.EditImageActivity.Companion.PICK_REQUEST
+            startActivityForResult(
+                Intent.createChooser(intent, "Select Picture"),
+                PICK_REQUEST
             )
             showLoading(false)
-        } else if (requestCode == "remote"){
+        } else if (requestCode == "remote") {
             val executor = Executors.newSingleThreadExecutor()
             val handler = Handler(Looper.getMainLooper())
             var image: Bitmap? = null
@@ -145,12 +148,11 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
                     showLoading(true)
                     val `in` = java.net.URL(photoUrl).openStream()
                     image = BitmapFactory.decodeStream(`in`)
-                    handler.post{
+                    handler.post {
                         showLoading(false)
                         mPhotoEditorView?.source?.setImageBitmap(image)
                     }
-                }
-                catch (e: Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
@@ -158,7 +160,7 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         showLoading(false)
         mPhotoEditorView?.source?.setImageResource(R.drawable.blank_image)
         mSaveFileHelper = FileSaveHelper(this)
-        mScaleGestureDetector = ScaleGestureDetector(this,ScaleListener())
+        mScaleGestureDetector = ScaleGestureDetector(this, ScaleListener())
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -169,10 +171,10 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         return true
     }
 
-    private inner class ScaleListener: ScaleGestureDetector.SimpleOnScaleGestureListener(){
+    private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             mScaleFactor *= detector.scaleFactor
-            mScaleFactor = max(0.1f, min(mScaleFactor,10.0f))
+            mScaleFactor = max(0.1f, min(mScaleFactor, 10.0f))
             mPhotoEditorView?.scaleX = mScaleFactor
             mPhotoEditorView?.scaleY = mScaleFactor
             return true
@@ -185,7 +187,7 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         }
 
         when (intent.action) {
-            Intent.ACTION_EDIT, com.neorevolt.pesteditor.EditImageActivity.Companion.ACTION_NEXTGEN_EDIT -> {
+            Intent.ACTION_EDIT, ACTION_NEXTGEN_EDIT -> {
                 try {
                     val uri = intent.data
                     val bitmap = MediaStore.Images.Media.getBitmap(
@@ -232,8 +234,10 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
     }
 
     override fun onEditTextChangeListener(rootView: View?, text: String?, colorCode: Int) {
-        val textEditorDialogFragment = TextEditorDialogFragment.show(this, text.toString(), colorCode)
-        textEditorDialogFragment.setOnTextEditorListener (object : TextEditorDialogFragment.TextEditorListener {
+        val textEditorDialogFragment =
+            TextEditorDialogFragment.show(this, text.toString(), colorCode)
+        textEditorDialogFragment.setOnTextEditorListener(object :
+            TextEditorDialogFragment.TextEditorListener {
             override fun onDone(inputText: String?, colorCode: Int) {
                 val styleBuilder = TextStyleBuilder()
                 styleBuilder.withTextColor(colorCode)
@@ -246,23 +250,38 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
     }
 
     override fun onAddViewListener(viewType: ViewType?, numberOfAddedViews: Int) {
-        Log.d(com.neorevolt.pesteditor.EditImageActivity.Companion.TAG, "onAddViewListener() called with: viewType = [$viewType], numberOfAddedViews = [$numberOfAddedViews]")
+        Log.d(
+            TAG,
+            "onAddViewListener() called with: viewType = [$viewType], numberOfAddedViews = [$numberOfAddedViews]"
+        )
     }
 
     override fun onRemoveViewListener(viewType: ViewType?, numberOfAddedViews: Int) {
-        Log.d(com.neorevolt.pesteditor.EditImageActivity.Companion.TAG, "onRemoveViewListener() called with: viewType = [$viewType], numberOfAddedViews = [$numberOfAddedViews]")
+        Log.d(
+            TAG,
+            "onRemoveViewListener() called with: viewType = [$viewType], numberOfAddedViews = [$numberOfAddedViews]"
+        )
     }
 
     override fun onStartViewChangeListener(viewType: ViewType?) {
-        Log.d(com.neorevolt.pesteditor.EditImageActivity.Companion.TAG, "onStartViewChangeListener() called with: viewType = [$viewType]")
+        Log.d(
+            TAG,
+            "onStartViewChangeListener() called with: viewType = [$viewType]"
+        )
     }
 
     override fun onStopViewChangeListener(viewType: ViewType?) {
-        Log.d(com.neorevolt.pesteditor.EditImageActivity.Companion.TAG, "onStopViewChangeListener() called with: viewType = [$viewType]")
+        Log.d(
+            TAG,
+            "onStopViewChangeListener() called with: viewType = [$viewType]"
+        )
     }
 
     override fun onTouchSourceImage(event: MotionEvent?) {
-        Log.d(com.neorevolt.pesteditor.EditImageActivity.Companion.TAG, "onTouchView() called with: event = [$event]")
+        Log.d(
+            TAG,
+            "onTouchView() called with: event = [$event]"
+        )
     }
 
     @SuppressLint("NonConstantResourceId", "MissingPermission")
@@ -275,16 +294,18 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
             R.id.imgShare -> sharePicture()
             R.id.imgCamera -> {
                 val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(cameraIntent,
-                    com.neorevolt.pesteditor.EditImageActivity.Companion.CAMERA_REQUEST
+                startActivityForResult(
+                    cameraIntent,
+                    CAMERA_REQUEST
                 )
             }
             R.id.imgGallery -> {
                 val intent = Intent()
                 intent.type = "image/*"
                 intent.action = Intent.ACTION_GET_CONTENT
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                    com.neorevolt.pesteditor.EditImageActivity.Companion.PICK_REQUEST
+                startActivityForResult(
+                    Intent.createChooser(intent, "Select Picture"),
+                    PICK_REQUEST
                 )
             }
         }
@@ -311,13 +332,13 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
 
         return FileProvider.getUriForFile(
             this,
-            com.neorevolt.pesteditor.EditImageActivity.Companion.FILE_PROVIDER_AUTHORITY,
+            FILE_PROVIDER_AUTHORITY,
             File(path)
         )
     }
 
 
-    // TODO : Coba agar bisa save ke gallery atau remote
+    // TODO : Save Image
     @RequiresPermission(allOf = [Manifest.permission.WRITE_EXTERNAL_STORAGE])
     private fun saveImage() {
         val fileName = System.currentTimeMillis().toString() + ".png"
@@ -354,7 +375,8 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
                                     showSnackbar("Image Saved Successfully")
                                     mSaveImageUri = uri
                                     mPhotoEditorView?.source?.setImageURI(mSaveImageUri)
-                                    val myFile = mSaveImageUri?.let { uriToFile(it,this@EditImageActivity)}
+                                    val myFile =
+                                        mSaveImageUri?.let { uriToFile(it, this@EditImageActivity) }
                                     getFile = myFile
                                 }
 
@@ -409,12 +431,21 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
                                     showSnackbar("Image Saved Successfully")
                                     mSaveImageUri = uri
                                     mPhotoEditorView?.source?.setImageURI(mSaveImageUri)
-                                    val myFile = mSaveImageUri?.let { uriToFile(it,this@EditImageActivity)}
+                                    val myFile =
+                                        mSaveImageUri?.let { uriToFile(it, this@EditImageActivity) }
                                     getFile = myFile
 
                                     // TODO: Delete this save to DB when UploadImage() Completed
-                                    mTransactions = ViewModelProvider(this@EditImageActivity).get(LayoutViewModel::class.java)
-                                    mTransactions.addTransaction(TransactionEntity(getFile.toString(),getFile?.name.toString(),null))
+                                    mTransactions = ViewModelProvider(this@EditImageActivity).get(
+                                        LayoutViewModel::class.java
+                                    )
+                                    mTransactions.addTransaction(
+                                        TransactionEntity(
+                                            getFile.toString(),
+                                            getFile?.name.toString(),
+                                            null
+                                        )
+                                    )
 //                                    uploadImage()
                                 }
 
@@ -433,16 +464,17 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
             requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             when (requestCode) {
-                com.neorevolt.pesteditor.EditImageActivity.Companion.CAMERA_REQUEST -> {
+                CAMERA_REQUEST -> {
                     mPhotoEditor?.clearAllViews()
                     val photo = data?.extras?.get("data") as Bitmap?
                     mPhotoEditorView?.source?.setImageBitmap(photo)
                 }
-                com.neorevolt.pesteditor.EditImageActivity.Companion.PICK_REQUEST -> try {
+                PICK_REQUEST -> try {
                     mPhotoEditor?.clearAllViews()
                     val uri = data?.data
 
@@ -522,7 +554,8 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
             }
             ToolType.TEXT -> {
                 val textEditorDialogFragment = TextEditorDialogFragment.show(this)
-                textEditorDialogFragment.setOnTextEditorListener(object : TextEditorDialogFragment.TextEditorListener {
+                textEditorDialogFragment.setOnTextEditorListener(object :
+                    TextEditorDialogFragment.TextEditorListener {
                     override fun onDone(inputText: String?, colorCode: Int) {
                         val styleBuilder = TextStyleBuilder()
                         styleBuilder.withTextColor(colorCode)
@@ -565,7 +598,8 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
     private fun showFilter(isVisible: Boolean) {
         mIsFilterVisible = isVisible
         mConstraintSet.clone(mRootView)
-        val rvFilterId: Int = mRvFilters?.id ?: throw IllegalArgumentException("RV Filter ID Expected")
+        val rvFilterId: Int =
+            mRvFilters?.id ?: throw IllegalArgumentException("RV Filter ID Expected")
         if (isVisible) {
             mConstraintSet.clear(rvFilterId, ConstraintSet.START)
             mConstraintSet.connect(
@@ -591,7 +625,8 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
     }
 
     override fun onBackPressed() {
-        val isCacheEmpty = mPhotoEditor?.isCacheEmpty ?: throw IllegalArgumentException("isCacheEmpty Expected")
+        val isCacheEmpty =
+            mPhotoEditor?.isCacheEmpty ?: throw IllegalArgumentException("isCacheEmpty Expected")
 
         if (mIsFilterVisible) {
             showFilter(false)
@@ -613,8 +648,8 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
 
 
     companion object {
-        private val TAG = com.neorevolt.pesteditor.EditImageActivity::class.java.simpleName
-        const val FILE_PROVIDER_AUTHORITY = "com.example.photoediting.fileprovider"
+        private val TAG = EditImageActivity::class.java.simpleName
+        const val FILE_PROVIDER_AUTHORITY = "com.neorevolt.drawimage.fileprovider"
         private const val CAMERA_REQUEST = 52
         private const val PICK_REQUEST = 53
         const val ACTION_NEXTGEN_EDIT = "action_nextgen_edit"

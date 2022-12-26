@@ -53,7 +53,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="example.photoeditorlibforpub.fileprovider"
+            android:authorities="neorevolt.drawimage.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
