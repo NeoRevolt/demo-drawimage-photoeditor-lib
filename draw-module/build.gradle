@@ -17,7 +17,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 33
         versionCode 1
-        versionName "0.0.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -48,7 +48,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'com.github.neorevolt'
             artifactId = 'demo-drawimage-photoeditor-lib'
-            version = '0.0.0'
+            version = '1.0.0'
 
             afterEvaluate {
                 from components.release
